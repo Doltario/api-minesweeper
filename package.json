@@ -1,0 +1,17 @@
+{
+  "name": "api-minesweeper",
+  "version": "0.0.1",
+  "description": "An api for minesweeper App",
+  "main": "index.js",
+  "author": "Félix Darraud",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "fastify": "^2.10.0",
+    "fastify-cors": "^2.2.0",
+    "nodemon": "^2.0.0"
+  }
+}
