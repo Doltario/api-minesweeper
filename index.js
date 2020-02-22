@@ -1,4 +1,6 @@
 const fastify = require('fastify')({ logger: true })
+const io = require('socket.io')(fastify.server)
+const socketRouter = require('./socketRouter')
 
 fastify.register(require('fastify-cors'))
 
@@ -6,6 +8,9 @@ fastify.register(require('fastify-cors'))
 const start = async () => {
   try {
     await fastify.listen(3001, 'localhost')
+
+    io.on('connection', socketRouter)
+
     fastify.log.info('------------------------')
     fastify.log.info(`server listening on ${fastify.server.address().port}`)
     fastify.log.info('------------------------')
