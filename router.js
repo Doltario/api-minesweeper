@@ -17,6 +17,7 @@ async function routes(fastify, options) {
     try {
       return gridController.createGame()
     } catch (error) {
+      console.error('An error occured while creating game', error)
       reply.code(500).send('An error occured while creating game')
     }
   })
