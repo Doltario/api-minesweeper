@@ -9,7 +9,7 @@ const start = async () => {
   try {
     await fastify.listen(3001, 'localhost')
 
-    io.on('connection', socketRouter)
+    io.of('/minesweeper').on('connection', socketRouter.minesweeperRoutes)
 
     fastify.log.info('------------------------')
     fastify.log.info(`server listening on ${fastify.server.address().port}`)
