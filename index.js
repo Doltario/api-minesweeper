@@ -1,5 +1,11 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 const fastify = require('fastify')({ logger: true })
+const mongoose = require('mongoose')
 const io = require('socket.io')(fastify.server)
+
 const socketRouter = require('./socketRouter')
 
 fastify.register(require('fastify-cors'))
@@ -7,7 +13,7 @@ fastify.register(require('fastify-cors'))
 // Run the server!
 const start = async () => {
   try {
-    await fastify.listen(3001, 'localhost')
+    await fastify.listen(3001, '0.0.0.0')
 
     io.of('/minesweeper').on('connection', socketRouter.minesweeperRoutes)
 
@@ -19,6 +25,17 @@ const start = async () => {
     process.exit(1)
   }
 }
+
+mongoose
+  .connect(process.env.MONGO_URL, { useNewUrlParser: true })
+  .then(db => {
+    console.log('-_-_-_-_-_-_-_-_-_-_-')
+    console.log(`Connected to database on ${process.env.MONGO_URL}`)
+    console.log('-_-_-_-_-_-_-_-_-_-_-')
+  })
+  .catch(error => {
+    throw new Error(`Database connection failed: ${error}`)
+  })
 
 fastify.register(require('./router'))
 
