@@ -10,15 +10,15 @@ const socketRouter = require('./socketRouter')
 
 fastify.register(require('fastify-cors'))
 
-fastify.addContentTypeParser('application/json', { parseAs: 'string' }, function(req, body, done) {
-  try {
-    var json = JSON.parse(body)
-    done(null, json)
-  } catch (err) {
-    err.statusCode = 400
-    done(err, undefined)
-  }
-})
+// fastify.addContentTypeParser('application/json', { parseAs: 'string' }, function(req, body, done) {
+//   try {
+//     var json = JSON.parse(body)
+//     done(null, json)
+//   } catch (err) {
+//     err.statusCode = 400
+//     done(err, undefined)
+//   }
+// })
 
 // Run the server!
 const start = async () => {
