@@ -1,13 +1,16 @@
-function minesweeperRoutes(socket) {
-  socket.on('JOIN_ROOM', function(room) {
-    console.info(`${socket.client.id} joins room: ${room}`)
-    socket.join(room)
-    socket.broadcast.to(room).emit('JOINED', socket.client.id)
-  })
+const gameController = require('./controllers/gameController')
+const GameModel = require('./models/game')
 
-  socket.on('REVEAL', function(boxIndex, room) {
-    console.info(`Revealing box ${boxIndex} to room ${room}`)
-    socket.to(room).emit('REVEAL', boxIndex)
+function minesweeperRoutes(socket) {
+  socket.on('JOIN_ROOM', function(roomId) {
+    socket.join(roomId)
+    console.info(`${socket.client.id} joins room: ${roomId}`)
+    socket.broadcast.to(roomId).emit('SOMEONE_JOINED_ROOM', socket.client.id)
+    socket.emit('ROOM_JOINED', roomId)
+  })
+  socket.on('REVEAL', function(boxIndex, roomId) {
+    console.info(`Revealing box ${boxIndex} to room ${roomId}`)
+    socket.to(roomId).emit('REVEAL', boxIndex)
   })
 }
 
