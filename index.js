@@ -10,6 +10,16 @@ const socketRouter = require('./socketRouter')
 
 fastify.register(require('fastify-cors'))
 
+fastify.addContentTypeParser('application/json', { parseAs: 'string' }, function(req, body, done) {
+  try {
+    var json = JSON.parse(body)
+    done(null, json)
+  } catch (err) {
+    err.statusCode = 400
+    done(err, undefined)
+  }
+})
+
 // Run the server!
 const start = async () => {
   try {
@@ -29,9 +39,9 @@ const start = async () => {
 mongoose
   .connect(process.env.MONGO_URL, { useNewUrlParser: true })
   .then(db => {
-    console.log('-_-_-_-_-_-_-_-_-_-_-')
-    console.log(`Connected to database on ${process.env.MONGO_URL}`)
-    console.log('-_-_-_-_-_-_-_-_-_-_-')
+    console.info('-_-_-_-_-_-_-_-_-_-_-')
+    console.info(`Connected to database on ${process.env.MONGO_URL}`)
+    console.info('-_-_-_-_-_-_-_-_-_-_-')
   })
   .catch(error => {
     throw new Error(`Database connection failed: ${error}`)

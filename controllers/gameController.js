@@ -1,24 +1,44 @@
 const MinesWeeper = require('../lib/MinesWeeper')
 const GameModel = require('../models/game')
+const uid = require('../utils/uid')
+const ObjectId = require('mongodb').ObjectId
 
 createGame = (width, height, bombsNumber) => {
   const game = new MinesWeeper(width, height, bombsNumber).stringify()
 
-  const roomId = `Yo${Date.now()}` //TODO: generate pretty roomId
+  const gameToSave = new GameModel({ grid: JSON.stringify(JSON.parse(game).grid) })
 
-  const gameToSave = new GameModel({ grid: game.grid, room: { id: roomId } })
   gameToSave.save()
 
-  return { game: JSON.parse(game), room: { id: roomId } }
+  const response = {
+    game: {
+      _id: gameToSave._id,
+      grid: JSON.parse(gameToSave.grid)
+    }
+  }
+
+  return response
 }
 
-getGameByRoomId = roomId => {
+getGameById = gameId => {
   return new Promise((resolve, reject) => {
-    GameModel.findOne({ room: { id: roomId } }, (error, game) => {
+    if (!gameId) {
+      reject(new Error(`First parameter of gameController.getGameById() must be a string, ${typeof gameId} given`))
+    }
+
+    GameModel.findOne({ _id: ObjectId(gameId) }, (error, game) => {
       if (error) reject(new Error('Game not found', error))
-      resolve(game)
+      const response = {
+        game: {
+          _id: game._id,
+          grid: JSON.parse(game.grid)
+        }
+      }
+      console.dir(response)
+
+      resolve(response)
     })
   })
 }
 
-module.exports = { createGame, getGameByRoomId }
+module.exports = { createGame, getGameById }
