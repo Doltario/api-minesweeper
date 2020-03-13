@@ -1,6 +1,5 @@
 const MinesWeeper = require('../lib/MinesWeeper')
 const GameModel = require('../models/game')
-const uid = require('../utils/uid')
 const ObjectId = require('mongodb').ObjectId
 
 createGame = (width, height, bombsNumber) => {
