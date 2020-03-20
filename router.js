@@ -12,10 +12,10 @@ async function routes(fastify, options) {
     // if (!request.body.height || typeof request.body.height !== 'number') return reply.code(400).send(`Height param must be a number, ${typeof request.body.height}`)
     // if (!request.body.bombsNumber || typeof request.body.bombsNumber !== 'number') return reply.code(400).send(`Width param must be a number, ${typeof request.body.bombsNumber}`)
 
-    const { height, width, bombsNumber } = JSON.parse(request.body)
+    const { height, width, bombsNumber, online } = JSON.parse(request.body)
 
     try {
-      const game = gameController.createGame(width, height, bombsNumber)
+      const game = gameController.createGame(width, height, bombsNumber, online)
 
       return game
     } catch (error) {

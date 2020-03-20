@@ -2,17 +2,19 @@ const MinesWeeper = require('../lib/MinesWeeper')
 const GameModel = require('../models/game')
 const ObjectId = require('mongodb').ObjectId
 
-createGame = (width, height, bombsNumber) => {
+createGame = (width, height, bombsNumber, online) => {
   const game = new MinesWeeper(width, height, bombsNumber).stringify()
 
-  const gameToSave = new GameModel({ grid: JSON.stringify(JSON.parse(game).grid) })
+  const gameToSave = new GameModel({ grid: JSON.stringify(JSON.parse(game).grid), online })
 
   gameToSave.save()
 
   const response = {
+    //felix@TODO: create a response builder
     game: {
       _id: gameToSave._id,
-      grid: JSON.parse(gameToSave.grid)
+      grid: JSON.parse(gameToSave.grid),
+      online: gameToSave.online
     }
   }
 
@@ -32,7 +34,8 @@ getGameById = gameId => {
       const response = {
         game: {
           _id: game._id,
-          grid: JSON.parse(game.grid)
+          grid: JSON.parse(game.grid),
+          online: game.online
         }
       }
 
