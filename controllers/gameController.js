@@ -27,13 +27,14 @@ getGameById = gameId => {
 
     GameModel.findOne({ _id: ObjectId(gameId) }, (error, game) => {
       if (error) reject(new Error('Game not found', error))
+      if (!game) resolve({})
+
       const response = {
         game: {
           _id: game._id,
           grid: JSON.parse(game.grid)
         }
       }
-      console.dir(response)
 
       resolve(response)
     })
