@@ -16,6 +16,10 @@ function minesweeperRoutes(socket) {
     console.info(`Toggling box' flag ${boxIndex} for room ${roomId}`)
     socket.to(roomId).emit('TOGGLE_FLAG', boxIndex)
   })
+  socket.on('RESET_GAME', function(game, roomId) {
+    console.info(`Resetting game for room ${roomId}`)
+    socket.to(roomId).emit('RESET_GAME', game)
+  })
 }
 
 module.exports = {

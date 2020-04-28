@@ -50,7 +50,7 @@ getGameById = gameId => {
 
 saveGame = (gameId, gameToSave) => {
   return new Promise((resolve, reject) => {
-    if (!gameToSave) {
+    if (!gameId) {
       reject(new Error(`First parameter of gameController.getGameById() must be a string, ${typeof gameId} given`))
     }
     if (!gameToSave) {
@@ -66,11 +66,40 @@ saveGame = (gameId, gameToSave) => {
       game.online = gameToSave.online
       game.won = gameToSave.won
 
-      console.log(game)
       game.save()
       resolve(game)
     })
   })
 }
 
-module.exports = { createGame, getGameById, saveGame }
+resetGame = (gameId) => {
+  return new Promise((resolve, reject) => {
+    if (!gameId) {
+      reject(new Error(`First parameter of gameController.resetGame() must be a string, ${typeof gameId} given`))
+    }
+    GameModel.findOne({ _id: ObjectId(gameId) }, (error, game) => {
+      if (error) reject(new Error('Game not found', error))
+      if (!game) resolve({}) 
+
+      const transitoryGame = new MinesWeeper(game.width, game.height, game.bombsNumber).stringify()      
+      game.grid = JSON.stringify(JSON.parse(transitoryGame).grid)
+      game.ended = false
+      game.won = null
+      game.save()
+
+      const response = {
+        game: {
+          _id: game._id,
+          grid: JSON.parse(game.grid),
+          ended: game.ended,
+          won: game.won,
+          online: game.online
+        }
+      }
+
+      resolve(response)
+    })
+  })
+}
+
+module.exports = { createGame, getGameById, saveGame, resetGame }
