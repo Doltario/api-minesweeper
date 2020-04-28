@@ -34,6 +34,24 @@ async function routes(fastify, options) {
         .catch(error => {
           console.error('Cannot find game', error)
           reply.code(500).send('Cannot find game')
+          reject(error)
+        })
+    })
+  })
+
+  fastify.put('/game/:gameId', (request, reply) => {
+    return new Promise((resolve, reject) => {
+      const gameToSave = JSON.parse(request.body)
+
+      gameController
+        .saveGame(request.params.gameId, gameToSave)
+        .then(game => {
+          resolve(game)
+        })
+        .catch(error => {
+          console.error('Cannot patch game', error)
+          reply.code(500).send('Cannot patch game')
+          reject(error)
         })
     })
   })

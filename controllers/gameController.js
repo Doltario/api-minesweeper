@@ -14,6 +14,8 @@ createGame = (width, height, bombsNumber, online) => {
     game: {
       _id: gameToSave._id,
       grid: JSON.parse(gameToSave.grid),
+      ended: gameToSave.ended,
+      won: null,
       online: gameToSave.online
     }
   }
@@ -35,6 +37,8 @@ getGameById = gameId => {
         game: {
           _id: game._id,
           grid: JSON.parse(game.grid),
+          ended: game.ended,
+          won: game.won,
           online: game.online
         }
       }
@@ -44,4 +48,29 @@ getGameById = gameId => {
   })
 }
 
-module.exports = { createGame, getGameById }
+saveGame = (gameId, gameToSave) => {
+  return new Promise((resolve, reject) => {
+    if (!gameToSave) {
+      reject(new Error(`First parameter of gameController.getGameById() must be a string, ${typeof gameId} given`))
+    }
+    if (!gameToSave) {
+      reject(new Error(`Second parameter of gameController.saveGame() must be a string, ${typeof gameToSave} given`))
+    }
+
+    GameModel.findOne({ _id: ObjectId(gameId) }, (error, game) => {
+      if (error) reject(new Error('Game not found', error))
+      if (!game) resolve({})
+      
+      game.grid = JSON.stringify(gameToSave.grid)
+      game.ended = gameToSave.ended
+      game.online = gameToSave.online
+      game.won = gameToSave.won
+
+      console.log(game)
+      game.save()
+      resolve(game)
+    })
+  })
+}
+
+module.exports = { createGame, getGameById, saveGame }
