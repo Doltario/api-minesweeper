@@ -2,23 +2,23 @@ const gameController = require('./controllers/gameController')
 const GameModel = require('./models/game')
 
 function minesweeperRoutes(socket) {
-  socket.on('JOIN_ROOM', function(roomId) {
+  socket.on('joinRoom', function(roomId) {
     socket.join(roomId)
     console.info(`${socket.client.id} joins room: ${roomId}`)
-    socket.broadcast.to(roomId).emit('SOMEONE_JOINED_ROOM', socket.client.id)
-    socket.emit('ROOM_JOINED', roomId)
+    socket.broadcast.to(roomId).emit('someoneJoinedRoom', socket.client.id)
+    socket.emit('roomJoined', roomId)
   })
-  socket.on('CLICK_BOX', function(boxIndex, roomId) {
+  socket.on('clickBox', function(boxIndex, roomId) {
     console.info(`Revealing box ${boxIndex} to room ${roomId}`)
-    socket.to(roomId).emit('CLICK_BOX', boxIndex)
+    socket.to(roomId).emit('clickBox', boxIndex)
   })
-  socket.on('TOGGLE_FLAG', function(boxIndex, roomId) {
+  socket.on('toggleFlag', function(boxIndex, roomId) {
     console.info(`Toggling box' flag ${boxIndex} for room ${roomId}`)
-    socket.to(roomId).emit('TOGGLE_FLAG', boxIndex)
+    socket.to(roomId).emit('toggleFlag', boxIndex)
   })
-  socket.on('RESET_GAME', function(game, roomId) {
+  socket.on('resetGame', function(game, roomId) {
     console.info(`Resetting game for room ${roomId}`)
-    socket.to(roomId).emit('RESET_GAME', game)
+    socket.to(roomId).emit('resetGame', game)
   })
 }
 
