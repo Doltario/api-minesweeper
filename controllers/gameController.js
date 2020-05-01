@@ -17,13 +17,13 @@ createGame = (width, height, bombsNumber, online) => {
       ended: gameToSave.ended,
       won: null,
       online: gameToSave.online,
-      players: gameToSave.players
-    }
+      players: gameToSave.players,
+    },
   }
   return response
 }
 
-getGameById = gameId => {
+getGameById = (gameId) => {
   return new Promise((resolve, reject) => {
     if (!gameId) {
       reject(new Error(`First parameter of gameController.getGameById() must be a string, ${typeof gameId} given`))
@@ -39,8 +39,8 @@ getGameById = gameId => {
           grid: JSON.parse(game.grid),
           ended: game.ended,
           won: game.won,
-          online: game.online
-        }
+          online: game.online,
+        },
       }
 
       resolve(response)
@@ -60,7 +60,7 @@ saveGame = (gameId, gameToSave) => {
     GameModel.findOne({ _id: ObjectId(gameId) }, (error, game) => {
       if (error) reject(new Error('Game not found', error))
       if (!game) resolve({})
-      
+
       game.grid = JSON.stringify(gameToSave.grid)
       game.ended = gameToSave.ended
       game.online = gameToSave.online
@@ -84,7 +84,7 @@ addPlayerToGame = (gameId, player) => {
     GameModel.findOne({ _id: ObjectId(gameId) }, (error, game) => {
       if (error) reject(new Error('Game not found', error))
       if (!game) return resolve({})
-      
+
       const playerExists = game.players.find((gamePlayer) => {
         return gamePlayer.socketId === player.socketId
       })
@@ -92,10 +92,10 @@ addPlayerToGame = (gameId, player) => {
       if (playerExists) {
         return reject('User already in game')
       }
-      
+
       game.players.push(player)
       game.save()
-      
+
       return resolve(game)
     })
   })
@@ -121,8 +121,8 @@ removePlayerFromGame = (gameId, playerSocketId) => {
       if (playerIndex >= 0) {
         game.players.splice(playerIndex, 1)
         game.save()
-      }      
-      resolve(game)      
+      }
+      resolve(game)
     })
   })
 }
@@ -135,9 +135,9 @@ resetGame = (gameId) => {
 
     GameModel.findOne({ _id: ObjectId(gameId) }, (error, game) => {
       if (error) reject(new Error('Game not found', error))
-      if (!game) return resolve({}) 
+      if (!game) return resolve({})
 
-      const transitoryGame = new MinesWeeper(game.width, game.height, game.bombsNumber).stringify()      
+      const transitoryGame = new MinesWeeper(game.width, game.height, game.bombsNumber).stringify()
       game.grid = JSON.stringify(JSON.parse(transitoryGame).grid)
       game.ended = false
       game.won = null
@@ -149,8 +149,8 @@ resetGame = (gameId) => {
           grid: JSON.parse(game.grid),
           ended: game.ended,
           won: game.won,
-          online: game.online
-        }
+          online: game.online,
+        },
       }
 
       return resolve(response)

@@ -5,6 +5,7 @@ function minesweeperRoutes(socket) {
 
   const removeSocket = function () {
     return new Promise((resolve, reject) => {
+      // felix@TODO: perhaps try to improve that in searching room into socket and not use local variable
       console.info(`${socket.client.id} left room ${localRoomId}`)
       gameController
         .removePlayerFromGame(localRoomId, socket.client.id)
@@ -54,6 +55,9 @@ function minesweeperRoutes(socket) {
   socket.on('resetGame', function (game, roomId) {
     console.info(`Resetting game for room ${roomId}`)
     socket.to(roomId).emit('resetGame', game)
+  })
+  socket.on('mouseMove', function (socketId, position) {
+    socket.broadcast.to(localRoomId).emit('mouseMove', { socketId, position })
   })
 }
 

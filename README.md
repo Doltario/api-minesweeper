@@ -34,4 +34,4 @@ If you prefer localhost, simply remove '0.0.0.0' params in index.js, it will set
 
 # TODO list: 
 - Response serializer to send exact same data structure for a game no matter the endpoint.
-- RoomId is now stored in room as localRoomId. This is transitory. And roomId should be deleted from events to use only localRoomId (and refactore it into roomId)
+- RoomId is now stored in room as localRoomId. This is transitory. And roomId should be deleted from events to use only localRoomId (and refactore it into roomId) EDIT: Not sure it is a good idea. On leaving due to timeout localRoomId seems to be empty
