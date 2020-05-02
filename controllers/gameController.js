@@ -138,7 +138,9 @@ resetGame = (gameId) => {
       if (error) reject(new Error('Game not found', error))
       if (!game) return resolve({})
 
-      const transitoryGame = new MinesWeeper(game.width, game.height, game.bombsNumber).stringify()
+      const { width, height, bombsNumber } = JSON.parse(game.grid)
+
+      const transitoryGame = new MinesWeeper(width, height, bombsNumber).stringify()
       game.grid = JSON.stringify(JSON.parse(transitoryGame).grid)
       game.ended = false
       game.won = null
