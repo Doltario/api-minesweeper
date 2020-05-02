@@ -6,7 +6,8 @@ createGame = (width, height, bombsNumber, online) => {
   const game = new MinesWeeper(width, height, bombsNumber).stringify()
 
   const gameToSave = new GameModel({ grid: JSON.stringify(JSON.parse(game).grid), online })
-
+  console.log(gameToSave.players);
+  
   gameToSave.save()
 
   const response = {
