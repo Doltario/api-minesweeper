@@ -13,7 +13,7 @@ fastify.register(require('fastify-cors'))
 // Run the server!
 const start = async () => {
   try {
-    await fastify.listen(3001, '0.0.0.0')
+    await fastify.listen(process.env.API_PORT, '0.0.0.0')
 
     io.of('/minesweeper').on('connection', socketRouter.minesweeperRoutes)
 
