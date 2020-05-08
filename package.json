@@ -1,6 +1,6 @@
 {
   "name": "api-minesweeper",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "An api for minesweeper App",
   "main": "index.js",
   "author": "Félix Darraud",
